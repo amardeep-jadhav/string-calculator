@@ -4,7 +4,7 @@ RSpec.describe StringCalculator do
 	describe "#add" do 
 		it "resturns 0 for any empty string" do
 			calculator = StringCalculator.new
-			calculator.add("").to eq(0)
+			expect(calculator.add('')).to eq(0)
 		end
 	end
 end
