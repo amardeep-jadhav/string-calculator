@@ -20,9 +20,13 @@ class StringCalculator
 		end
 
 		if numbers
-			numbers.join(',').split(',').map(&:to_i).sum
+			numbers.join(',').split(',').map(&:to_i).reject { |num| num >= 1000 }.sum
 		else
-			input.split(',').map(&:to_i).sum
+			input.split(',').map(&:to_i).reject { |num| num >= 1000 }.sum
 		end
+	end
+
+	def remove_bigger_number(numbers)
+		numbers.join(',').split(',').map(&:to_i).reject { |num| num >= 1000 }
 	end
 end
