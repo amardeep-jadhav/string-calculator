@@ -1,32 +1,31 @@
 class StringCalculator
-	def add(input)
-		return 0 if input.empty?
+  def add(input)
+    return 0 if input.empty?
 
-		if input.start_with?("//")
-			delimiter = input[2] 
-		end
-		
-		if input.include?("\n")
-			numbers = input.gsub("\n", ',').split(',')
-    end
-		
-		if(input.include?("\n") && delimiter)
-			numbers = input.gsub("\n", ',').split(delimiter || ',').last(2)
-		end
-		
-		negative_numbers = input.split(',').map(&:to_i).select { |n| n < 0 }
-		if(negative_numbers.any?)
-			raise "Negative numbers not allowed: #{negative_numbers.join(', ')}"
-		end
+    delimiter = extract_delimiter(input)
+    numbers = extract_numbers(input, delimiter)
+    validate_numbers(numbers)
 
-		if numbers
-			numbers.join(',').split(',').map(&:to_i).reject { |num| num >= 1000 }.sum
-		else
-			input.split(',').map(&:to_i).reject { |num| num >= 1000 }.sum
-		end
-	end
+    sum_valid_numbers(numbers)
+  end
 
-	def remove_bigger_number(numbers)
-		numbers.join(',').split(',').map(&:to_i).reject { |num| num >= 1000 }
-	end
+  private
+
+  def extract_delimiter(input)
+    input.start_with?("//") ? input[2] : ','
+  end
+
+  def extract_numbers(input, delimiter)
+    numbers_str = input.include?("\n") ? input.gsub("\n", ',') : input
+		numbers_str.split(delimiter).join(",").split(',').map(&:to_i)
+  end
+
+  def validate_numbers(numbers)
+    negative_numbers = numbers.select { |n| n < 0 }
+    raise "Negative numbers not allowed: #{negative_numbers.join(', ')}" if negative_numbers.any?
+  end
+
+  def sum_valid_numbers(numbers)
+    numbers.reject { |num| num >= 1000 }.sum
+  end
 end
